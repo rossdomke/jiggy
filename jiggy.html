@@ -23,7 +23,7 @@
 
       //clear();
       let colorArray = ['#000']
-      let inch = 300;
+      let inch = 100;
       canvas.width = 5 * inch;
       canvas.height = 7 * inch;
       var context = canvas.getContext('2d');
@@ -56,24 +56,37 @@
 
       function CreateLine([fx,fy], [tx,ty], cellSize){
         let isHorizontal = fy == ty;
-        let bumpSize = inch * .19;
+        
         context.beginPath();
         context.moveTo(fx, fy);
         
         while(fx < tx || fy < ty){
+          let bumpSize = inch * (Math.random() * (0.30 - 0.14) + 0.14);
           fx += ((cellSize/2) - bumpSize/2) * isHorizontal;
           fy += ((cellSize/2) - bumpSize/2) * !isHorizontal;
-          context.lineTo(fx, fy);
-          let beNegative = Math.random() < 0.5 ? -1 : 1;
+
           
-          
+          let beNegative = Math.random() < 0.5 ? -1 : 1;  
           if(isHorizontal){
+            
+            context.quadraticCurveTo(
+              fx - (cellSize/4),
+              fy - (cellSize * (Math.random() * .15) * beNegative),
+              fx, fy
+            );
+            beNegative = Math.random() < 0.5 ? -1 : 1;
             context.bezierCurveTo(
                 fx - bumpSize, fy + bumpSize * 1.8 * beNegative, 
                 fx + bumpSize * 2, fy + bumpSize * 1.8 * beNegative,
                 fx + bumpSize, fy
             );
           }else{
+            context.quadraticCurveTo(
+              fx + (cellSize * (Math.random() * .15) * beNegative),
+              fy - (cellSize/4),
+              fx, fy
+            );
+            beNegative = Math.random() < 0.5 ? -1 : 1;
             context.bezierCurveTo(
                 fx + bumpSize * 1.8 * beNegative, fy - bumpSize, 
                 fx + bumpSize * 1.8 * beNegative, fy + bumpSize * 2,
@@ -83,8 +96,25 @@
           
           fx += ((cellSize/2) + bumpSize/2) * isHorizontal;
           fy += ((cellSize/2) + bumpSize/2) * !isHorizontal;
-          context.lineTo(fx, fy);
+          beNegative = Math.random() < 0.5 ? -1 : 1;
+          if(isHorizontal){
+             context.quadraticCurveTo(
+              fx - (cellSize/4),
+              fy - (cellSize * (Math.random() * .15) * beNegative),
+              fx, fy
+            );
+          }else{
+            context.quadraticCurveTo(
+              fx + (cellSize * (Math.random() * .15) * beNegative),
+              fy - (cellSize/4),
+              fx, fy
+            );
+          }
+          
+          
         }
+
+        //context.lineTo(fx, fy);
         context.strokeStyle = colorArray[Math.floor(Math.random() * colorArray.length)];
         context.stroke();
         
