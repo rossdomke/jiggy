@@ -41,12 +41,7 @@
         for(let x = inch; x< canvas.width; x += inch){
           CreateLine([x, 0], [x, canvas.height], inch);
         }
-        context.beginPath();
-        context.moveTo(0,0);
-        context.lineTo(0, canvas.height);
-        context.lineTo(canvas.width, canvas.height);
-        context.lineTo(canvas.width, 0);
-        context.lineTo(0, 0);
+        context.rect(0,0, canvas.width, canvas.height);
         context.stroke();
 	
       }
