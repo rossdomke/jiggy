@@ -18,110 +18,30 @@
     <button onclick="GeneratePuzzle()">Regenerate Puzzle</button>
     <div class="imgContainer">
     </div>
+    <script src="jiggy.js"></script>
     <script>
       var canvas = document.getElementById('myCanvas');
 
+
       //clear();
-      let colorArray = ['#000']
-      let inch = 100;
-      canvas.width = 5 * inch;
-      canvas.height = 7 * inch;
-      var context = canvas.getContext('2d');
-      
-
-
-      context.lineJoin = 'round';
-      context.lineWidth = 1;
-
       function GeneratePuzzle(){
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        for(let y = inch; y < canvas.height; y += inch){
-          CreateLine([0, y], [canvas.width, y], inch);
-        }
-        for(let x = inch; x< canvas.width; x += inch){
-          CreateLine([x, 0], [x, canvas.height], inch);
-        }
-        context.rect(0,0, canvas.width, canvas.height);
-        context.stroke();
-	
-      }
-
-
-      
-
-      function CreateLine([fx,fy], [tx,ty], cellSize){
-        let isHorizontal = fy == ty;
         
-        context.beginPath();
-        context.moveTo(fx, fy);
-        
-        while(fx < tx || fy < ty){
-          let bumpSize = inch * (Math.random() * (0.30 - 0.14) + 0.14);
-          fx += ((cellSize/2) - bumpSize/2) * isHorizontal;
-          fy += ((cellSize/2) - bumpSize/2) * !isHorizontal;
-
-          
-          let beNegative = Math.random() < 0.5 ? -1 : 1;  
-          if(isHorizontal){
-            
-            context.quadraticCurveTo(
-              fx - (cellSize/4),
-              fy - (cellSize * (Math.random() * .15) * beNegative),
-              fx, fy
-            );
-            beNegative = Math.random() < 0.5 ? -1 : 1;
-            context.bezierCurveTo(
-                fx - bumpSize, fy + bumpSize * 1.8 * beNegative, 
-                fx + bumpSize * 2, fy + bumpSize * 1.8 * beNegative,
-                fx + bumpSize, fy
-            );
-          }else{
-            context.quadraticCurveTo(
-              fx + (cellSize * (Math.random() * .15) * beNegative),
-              fy - (cellSize/4),
-              fx, fy
-            );
-            beNegative = Math.random() < 0.5 ? -1 : 1;
-            context.bezierCurveTo(
-                fx + bumpSize * 1.8 * beNegative, fy - bumpSize, 
-                fx + bumpSize * 1.8 * beNegative, fy + bumpSize * 2,
-                fx, fy + bumpSize
-            );
-          }
-          
-          fx += ((cellSize/2) + bumpSize/2) * isHorizontal;
-          fy += ((cellSize/2) + bumpSize/2) * !isHorizontal;
-          beNegative = Math.random() < 0.5 ? -1 : 1;
-          if(isHorizontal){
-             context.quadraticCurveTo(
-              fx - (cellSize/4),
-              fy - (cellSize * (Math.random() * .15) * beNegative),
-              fx, fy
-            );
-          }else{
-            context.quadraticCurveTo(
-              fx + (cellSize * (Math.random() * .15) * beNegative),
-              fy - (cellSize/4),
-              fx, fy
-            );
-          }
-          
-          
-        }
-
-        //context.lineTo(fx, fy);
+        let colorArray = ['#000']
+        let pieceSize = 55;
+        canvas.width = 16 * pieceSize;
+        canvas.height = 16 * pieceSize;
+        let context = canvas.getContext('2d');
         context.strokeStyle = colorArray[Math.floor(Math.random() * colorArray.length)];
-        context.stroke();
-        
+        context.lineJoin = 'round';
+        context.lineWidth = 1;
+        jiggy.GeneratePuzzle(context, pieceSize);
       }
-
       function saveCanvas(){
         var h = "<img src='"+canvas.toDataURL()+"' alt='from canvas'/>";
         var tab=window.open();
         tab.document.write(h);
       }
-      
+      GeneratePuzzle();
     </script>
-
   </body>
 </html>      
