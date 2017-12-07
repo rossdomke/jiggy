@@ -1,47 +1,50 @@
-<!DOCTYPE HTML>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <style>
-      body {
-        margin: 0px;
-        padding: 0px;
-      }
-      canvas {
-        background: #bdc3c7;
-      }
-    </style>
-  </head> 
+    <title>Jigsaw Puzzle Vector Generator</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  </head>
   <body>
     <canvas id="myCanvas" width="360" height="504"></canvas>
 
-    <button onclick="saveCanvas()">Save Image</button>
-    <button onclick="GeneratePuzzle()">Regenerate Puzzle</button>
-    <div class="imgContainer">
-    </div>
-    <script src="jiggy.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>
-      var canvas = document.getElementById('myCanvas');
+      $(function(){
+        var canvas = document.getElementById('myCanvas');
+        GeneratePuzzle(70,70, 100);
 
-
-      //clear();
-      function GeneratePuzzle(){
-        
-        let colorArray = ['#000']
-        let pieceSize = 55;
-        canvas.width = 16 * pieceSize;
-        canvas.height = 16 * pieceSize;
-        let context = canvas.getContext('2d');
-        context.strokeStyle = colorArray[Math.floor(Math.random() * colorArray.length)];
-        context.lineJoin = 'round';
-        context.lineWidth = 1;
-        jiggy.GeneratePuzzle(context, pieceSize);
-      }
-      function saveCanvas(){
-        var h = "<img src='"+canvas.toDataURL()+"' alt='from canvas'/>";
-        var tab=window.open();
-        tab.document.write(h);
-      }
-      GeneratePuzzle();
+        //clear();
+        function GeneratePuzzle(col, row, pieceSize){
+          
+          let colorArray = ['#000']
+          canvas.width = col * pieceSize;
+          canvas.height = row * pieceSize;
+          let context = canvas.getContext('2d');
+          context.strokeStyle = colorArray[Math.floor(Math.random() * colorArray.length)];
+          context.lineJoin = 'round';
+          context.lineWidth = 1;
+          jiggy.GeneratePuzzle(context, pieceSize);
+        }
+        function saveCanvas(){
+          var h = "<img src='"+canvas.toDataURL()+"' alt='from canvas'/>";
+          var tab=window.open();
+          tab.document.write(h);
+        }
+      });
     </script>
+    
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="jiggy.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
   </body>
-</html>      
+</html>
+
+
