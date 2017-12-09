@@ -1,47 +1,91 @@
-<!DOCTYPE HTML>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <style>
-      body {
-        margin: 0px;
-        padding: 0px;
-      }
-      canvas {
-        background: #bdc3c7;
-      }
-    </style>
-  </head> 
+    <title>Jigsaw Puzzle Vector Generator</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  </head>
   <body>
-    <canvas id="myCanvas" width="360" height="504"></canvas>
-
-    <button onclick="saveCanvas()">Save Image</button>
-    <button onclick="GeneratePuzzle()">Regenerate Puzzle</button>
-    <div class="imgContainer">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 bg-light border mb-3 pb-2">
+          <form>
+            <div class="form-group">
+              <label for="pieceResolution">Piece Resolution</label>
+              <div class="input-group">
+                <input type="number" class="form-control" name="pieceResolution" id="pieceResolution" placeholder="Piece Resolution" aria-label="Size of puzzle piece in pixels." value="50">
+                <span class="input-group-addon">px</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="rows">Rows</label>
+              <input type="number" class="form-control" name="rows" value="10" id="rows" placeholder="Rows">
+            </div>
+            <div class="form-group">
+              <label for="columns">Columns</label>
+              <input type="number" class="form-control" name="columns" value="10" id="columns" placeholder="Columns">
+            </div>
+            <button type="submit" class="btn btn-block btn-primary">Generate</button>
+          </form>
+        </div>
+        <div class="col">
+          <canvas class="d-block mx-auto" id="myCanvas"></canvas>
+        </div>
+      </div>
     </div>
-    <script src="jiggy.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="
+    sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>
-      var canvas = document.getElementById('myCanvas');
-
-
-      //clear();
-      function GeneratePuzzle(){
+      $(function(){
         
+        $('input').on('keyup', () => {
+          $('form').submit();
+        });
+        $('form').on('submit', (e) =>{
+          let data = objectifyForm($( e.target ).serializeArray());
+          console.log(data);
+          GeneratePuzzle(parseInt(data.columns) || 2, parseInt(data.rows) || 2, parseInt(data.pieceResolution) || 75);
+          return false;
+        });
+
+        $('form').submit();
+
+      });
+      function GeneratePuzzle(col, row, pieceResolution){
+        
+        let canvas = document.getElementById('myCanvas');
         let colorArray = ['#000']
-        let pieceSize = 55;
-        canvas.width = 16 * pieceSize;
-        canvas.height = 16 * pieceSize;
+        canvas.width = col * pieceResolution;
+        canvas.height = row * pieceResolution;
         let context = canvas.getContext('2d');
         context.strokeStyle = colorArray[Math.floor(Math.random() * colorArray.length)];
         context.lineJoin = 'round';
         context.lineWidth = 1;
-        jiggy.GeneratePuzzle(context, pieceSize);
+        jiggy.GeneratePuzzle(context, pieceResolution);
       }
       function saveCanvas(){
+        let canvas = $('#myCanvas');
         var h = "<img src='"+canvas.toDataURL()+"' alt='from canvas'/>";
         var tab=window.open();
         tab.document.write(h);
       }
-      GeneratePuzzle();
+      function objectifyForm(formArray) {//serialize data function
+
+        var returnArray = {};
+        for (var i = 0; i < formArray.length; i++){
+          returnArray[formArray[i]['name']] = formArray[i]['value'];
+        }
+        return returnArray;
+      }
     </script>
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="jiggy.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
   </body>
-</html>      
+</html>
